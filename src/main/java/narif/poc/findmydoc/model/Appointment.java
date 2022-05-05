@@ -4,26 +4,33 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class Doctor {
+public class Appointment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String email;
-    private String phone;
-    private Integer availableSlotsCount;
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.PERSIST)
-    private Set<Slots> slots = new HashSet<>();
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    @OneToOne
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private Doctor doctor;
     @OneToOne
     @JoinColumn(name = "hospital_id", nullable = false)
     private Hospital hospital;
+
+    private LocalDate appointmentDate;
+
+    @Enumerated(EnumType.STRING)
+    private SlotsEn slotsEn;
     @Version
     private Long version;
 
@@ -31,17 +38,12 @@ public class Doctor {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Doctor doctor = (Doctor) o;
-        return id != null && Objects.equals(id, doctor.id);
+        Appointment that = (Appointment) o;
+        return id != null && Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
         return getClass().hashCode();
-    }
-
-    public void addSlots(Slots slots) {
-        this.getSlots().add(slots);
-        slots.setDoctor(this);
     }
 }
