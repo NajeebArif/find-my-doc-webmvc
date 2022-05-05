@@ -1,6 +1,6 @@
 spring:
   datasource:
-    username: user
+    username: postgres
     password: password
     url: jdbc:postgres://localhost:5432/find-my-doc-db
     hikari:
