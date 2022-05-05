@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    username: user
+    password: password
+    url: jdbc:postgres://localhost:5432/find-my-doc-db
+    hikari:
+      connection-timeout: 2000
+      maximum-pool-size: 5
