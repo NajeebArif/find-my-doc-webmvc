@@ -21,7 +21,7 @@ class HospitalRepoTest {
         assertThat(hospital1.getName()).isEqualTo("Ahmad Hospitals");
     }
 
-    private Hospital createHospital() {
+    static Hospital createHospital() {
         Hospital hospital = new Hospital();
         hospital.setName("Ahmad Hospitals");
         hospital.setAddress("Patna, Bihar");
