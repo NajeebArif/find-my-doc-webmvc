@@ -12,15 +12,15 @@ import java.time.LocalTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-class DocRepoTest {
+class DoctorRepoTest {
 
     @Autowired
-    private DocRepo docRepo;
+    private DoctorRepo doctorRepo;
 
     @Test
     void testDocRepo(){
         saveDoctor();
-        Doctor doctor1 = docRepo.findAll().get(0);
+        Doctor doctor1 = doctorRepo.findAll().get(0);
         assertThat(doctor1.getName()).isEqualTo("N. Arif");
         System.out.println(doctor1);
     }
@@ -35,7 +35,7 @@ class DocRepoTest {
         doctor.setHospital(hospital);
         Slots slots = getSlots();
         doctor.addSlots(slots);
-        docRepo.save(doctor);
+        doctorRepo.save(doctor);
     }
 
     private Slots getSlots() {

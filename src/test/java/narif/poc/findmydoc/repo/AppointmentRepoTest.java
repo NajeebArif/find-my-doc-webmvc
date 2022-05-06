@@ -18,7 +18,7 @@ class AppointmentRepoTest {
     private AppointmentRepo appointmentRepo;
 
     @Autowired
-    private DocRepo docRepo;
+    private DoctorRepo doctorRepo;
 
     @Autowired
     private UserRepository userRepository;
@@ -69,7 +69,7 @@ class AppointmentRepoTest {
         doctor.setHospital(hospital);
         Slots slots = getSlots();
         doctor.addSlots(slots);
-        docRepo.save(doctor);
+        doctorRepo.save(doctor);
     }
 
     private Slots getSlots() {
