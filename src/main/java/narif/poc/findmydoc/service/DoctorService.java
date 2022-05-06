@@ -5,8 +5,8 @@ import narif.poc.findmydoc.model.entity.Doctor;
 import narif.poc.findmydoc.model.entity.Hospital;
 import narif.poc.findmydoc.model.entity.Slots;
 import narif.poc.findmydoc.repo.DoctorRepo;
-import narif.poc.findmydoc.repo.HospitalRepo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +32,17 @@ public class DoctorService {
         doctor.setHospital(hospital);
         Set<Slots> collect = inputDoc.getAvailableSlots().stream().map(Slots::mapSlotDto).collect(Collectors.toSet());
         collect.forEach(doctor::addSlots);
+        return doctorRepo.save(doctor);
+    }
+
+    @Transactional
+    public Doctor areThereVacantSlots(final String doctorName){
+        Doctor doctor = doctorRepo.findByName(doctorName)
+                .orElseThrow(RuntimeException::new);
+        if (doctor.getAvailableSlotsCount()<1){
+            throw new RuntimeException("No slots available for the doc.");
+        }
+        doctor.setAvailableSlotsCount(doctor.getAvailableSlotsCount()-1);
         return doctorRepo.save(doctor);
     }
 

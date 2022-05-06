@@ -17,4 +17,8 @@ public class UserService {
     public User saveUser(final UserDto userDto){
         return userRepository.save(User.mapUserDtoToUser(userDto));
     }
+
+    public User fetchUser(String userName) {
+        return userRepository.findByUserName(userName).orElseThrow(RuntimeException::new);
+    }
 }
