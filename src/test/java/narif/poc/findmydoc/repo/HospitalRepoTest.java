@@ -1,6 +1,6 @@
 package narif.poc.findmydoc.repo;
 
-import narif.poc.findmydoc.model.Hospital;
+import narif.poc.findmydoc.model.entity.Hospital;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

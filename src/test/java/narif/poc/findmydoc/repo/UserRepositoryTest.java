@@ -1,6 +1,6 @@
 package narif.poc.findmydoc.repo;
 
-import narif.poc.findmydoc.model.User;
+import narif.poc.findmydoc.model.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

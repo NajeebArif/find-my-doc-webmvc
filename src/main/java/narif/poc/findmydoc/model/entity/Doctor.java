@@ -1,4 +1,4 @@
-package narif.poc.findmydoc.model;
+package narif.poc.findmydoc.model.entity;
 
 import lombok.*;
 import org.hibernate.Hibernate;

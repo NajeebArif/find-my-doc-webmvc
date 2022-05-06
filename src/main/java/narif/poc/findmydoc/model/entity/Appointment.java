@@ -1,11 +1,10 @@
-package narif.poc.findmydoc.model;
+package narif.poc.findmydoc.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -13,26 +12,33 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class Slots {
+public class Appointment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String slotName;
-    private String slotDescription;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    @OneToOne
     @JoinColumn(name = "doctor_id", nullable = false)
-    @JsonIgnore
-    @ToString.Exclude
     private Doctor doctor;
+    @OneToOne
+    @JoinColumn(name = "hospital_id", nullable = false)
+    private Hospital hospital;
+    @OneToOne
+    @JoinColumn(name = "slots_id", nullable = false)
+    private Slots slots;
+    private LocalDate appointmentDate;
+    @Version
+    private Long version;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Slots slots = (Slots) o;
-        return id != null && Objects.equals(id, slots.id);
+        Appointment that = (Appointment) o;
+        return id != null && Objects.equals(id, that.id);
     }
 
     @Override

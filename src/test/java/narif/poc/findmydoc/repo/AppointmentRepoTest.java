@@ -1,6 +1,6 @@
 package narif.poc.findmydoc.repo;
 
-import narif.poc.findmydoc.model.*;
+import narif.poc.findmydoc.model.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
