@@ -36,22 +36,6 @@ public class BenchmarkAppointment {
             restTemplate = new RestTemplate();
         }
 
-        public void submitTask(CompletableFuture<ResponseEntity<String>> task){
-            if(Objects.isNull(allResults))
-                allResults = new ArrayList<>();
-            allResults.add(task);
-        }
-
-        @TearDown(Level.Trial)
-        public void tearDown(){
-            OptionalInt any = allResults.stream()
-                    .map(CompletableFuture::join)
-                    .mapToInt(ResponseEntity::getStatusCodeValue)
-                    .filter(value -> value == 200)
-                    .findAny();
-            any.ifPresent(value -> {throw new RuntimeException();});
-        }
-
         private AppointmentDto createAppointment(String userName, String doctorName, String hospitalName) {
             AppointmentDto appointmentDto = new AppointmentDto();
             appointmentDto.setAppointmentDate(LocalDate.now().plusDays(1));
@@ -63,28 +47,28 @@ public class BenchmarkAppointment {
         }
     }
 
-//    @Benchmark
-//    @Fork(value = 1, warmups = 1)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    @BenchmarkMode(Mode.AverageTime)
-//    public void bookAppointment(AppointmentState appointmentState, Blackhole blackhole){
-//        HttpEntity<AppointmentDto> entity = appointmentState.entity;
-//        RestTemplate restTemplate = appointmentState.restTemplate;
-//        ResponseEntity<String> appointmentResponse = restTemplate.postForEntity(APPOINTMENTS, entity, String.class);
-//        int statusCodeValue = appointmentResponse.getStatusCodeValue();
-//        blackhole.consume(statusCodeValue);
-//    }
-
     @Benchmark
     @Fork(value = 2, warmups = 5)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @BenchmarkMode(Mode.AverageTime)
-    public void bookAppointmentParallel(AppointmentState appointmentState, Blackhole blackhole){
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    @BenchmarkMode({Mode.AverageTime, Mode.Throughput})
+    public void bookAppointment(AppointmentState appointmentState, Blackhole blackhole){
         HttpEntity<AppointmentDto> entity = appointmentState.entity;
         RestTemplate restTemplate = appointmentState.restTemplate;
-        CompletableFuture<ResponseEntity<String>> responseEntityCompletableFuture = CompletableFuture.supplyAsync(() -> restTemplate.postForEntity(APPOINTMENTS, entity, String.class));
-        appointmentState.submitTask(responseEntityCompletableFuture);
+        ResponseEntity<String> appointmentResponse = restTemplate.postForEntity(APPOINTMENTS, entity, String.class);
+        int statusCodeValue = appointmentResponse.getStatusCodeValue();
+        blackhole.consume(statusCodeValue);
     }
+
+//    @Benchmark
+//    @Fork(value = 2, warmups = 5)
+//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+//    @BenchmarkMode(Mode.AverageTime)
+//    public void bookAppointmentParallel(AppointmentState appointmentState, Blackhole blackhole){
+//        HttpEntity<AppointmentDto> entity = appointmentState.entity;
+//        RestTemplate restTemplate = appointmentState.restTemplate;
+//        CompletableFuture<ResponseEntity<String>> responseEntityCompletableFuture = CompletableFuture.supplyAsync(() -> restTemplate.postForEntity(APPOINTMENTS, entity, String.class));
+//        appointmentState.submitTask(responseEntityCompletableFuture);
+//    }
 
 //    @Benchmark
 //    @Fork(value = 2, warmups = 5)
