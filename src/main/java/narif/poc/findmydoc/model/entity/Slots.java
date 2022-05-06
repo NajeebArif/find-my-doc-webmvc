@@ -2,6 +2,7 @@ package narif.poc.findmydoc.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import narif.poc.findmydoc.model.dto.SlotsDto;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -38,5 +39,14 @@ public class Slots {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public static Slots mapSlotDto(final SlotsDto slotsDto){
+        Slots slots = new Slots();
+        slots.setSlotName(slotsDto.getSlotName());
+        slots.setSlotDescription(slotsDto.getSlotDescription());
+        slots.setStartTime(slotsDto.getStartTime());
+        slots.setEndTime(slotsDto.getEndTime());
+        return slots;
     }
 }
