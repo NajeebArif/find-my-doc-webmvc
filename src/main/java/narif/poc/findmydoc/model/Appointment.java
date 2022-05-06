@@ -26,11 +26,10 @@ public class Appointment {
     @OneToOne
     @JoinColumn(name = "hospital_id", nullable = false)
     private Hospital hospital;
-
+    @OneToOne
+    @JoinColumn(name = "slots_id", nullable = false)
+    private Slots slots;
     private LocalDate appointmentDate;
-
-    @Enumerated(EnumType.STRING)
-    private SlotsEn slotsEn;
     @Version
     private Long version;
 
