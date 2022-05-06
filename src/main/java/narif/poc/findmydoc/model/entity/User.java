@@ -2,6 +2,7 @@ package narif.poc.findmydoc.model.entity;
 
 
 import lombok.*;
+import narif.poc.findmydoc.model.dto.UserDto;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -33,5 +34,14 @@ public class User {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public static User mapUserDtoToUser(UserDto userDto){
+        User user = new User();
+        user.setUserName(userDto.getUserName());
+        user.setAddress(userDto.getAddress());
+        user.setEmailId(userDto.getEmailId());
+        user.setPhone(userDto.getPhone());
+        return user;
     }
 }

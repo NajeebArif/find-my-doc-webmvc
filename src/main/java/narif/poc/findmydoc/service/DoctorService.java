@@ -1,7 +1,6 @@
 package narif.poc.findmydoc.service;
 
 import narif.poc.findmydoc.model.dto.DoctorDto;
-import narif.poc.findmydoc.model.dto.SlotsDto;
 import narif.poc.findmydoc.model.entity.Doctor;
 import narif.poc.findmydoc.model.entity.Hospital;
 import narif.poc.findmydoc.model.entity.Slots;
@@ -10,24 +9,22 @@ import narif.poc.findmydoc.repo.HospitalRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 public class DoctorService {
 
     private final DoctorRepo doctorRepo;
-    private final HospitalRepo hospitalRepo;
+    private final HospitalService hospitalService;
 
-    public DoctorService(DoctorRepo doctorRepo, HospitalRepo hospitalRepo) {
+    public DoctorService(DoctorRepo doctorRepo, HospitalService hospitalService) {
         this.doctorRepo = doctorRepo;
-        this.hospitalRepo = hospitalRepo;
+        this.hospitalService = hospitalService;
     }
 
     public Doctor saveDoctor(final DoctorDto inputDoc){
         Doctor doctor = new Doctor();
-        Hospital hospital = hospitalRepo.findByName(inputDoc.getHospitalName())
-                .orElseThrow(RuntimeException::new);
+        Hospital hospital = hospitalService.findHospitalByName(inputDoc.getHospitalName());
         doctor.setEmail(inputDoc.getEmail());
         doctor.setName(inputDoc.getDoctorName());
         doctor.setPhone(inputDoc.getPhone());
