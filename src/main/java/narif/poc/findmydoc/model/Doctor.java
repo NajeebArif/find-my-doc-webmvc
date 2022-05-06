@@ -21,7 +21,7 @@ public class Doctor {
     private Integer availableSlotsCount;
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.PERSIST)
     private Set<Slots> slots = new HashSet<>();
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "hospital_id", nullable = false)
     private Hospital hospital;
     @Version

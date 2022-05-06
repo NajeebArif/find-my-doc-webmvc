@@ -17,8 +17,6 @@ class DocRepoTest {
     @Autowired
     private DocRepo docRepo;
 
-    @Autowired private HospitalRepo hospitalRepo;
-
     @Test
     void testDocRepo(){
         saveDoctor();
@@ -50,8 +48,7 @@ class DocRepoTest {
     }
 
     private Hospital saveHospital() {
-        Hospital hospital = HospitalRepoTest.createHospital();
-        return hospitalRepo.save(hospital);
+        return HospitalRepoTest.createHospital();
     }
 
 }
