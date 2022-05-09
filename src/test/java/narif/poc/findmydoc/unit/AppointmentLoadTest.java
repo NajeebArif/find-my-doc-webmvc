@@ -55,6 +55,7 @@ public class AppointmentLoadTest {
         try {
             return re.getStatusCodeValue();
         }catch (Exception e){
+            e.printStackTrace();
             return 500;
         }
 

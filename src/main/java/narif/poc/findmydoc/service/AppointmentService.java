@@ -35,7 +35,7 @@ public class AppointmentService {
         return appointmentRepo.save(appointment);
     }
 
-    @Transactional
+//    @Transactional
     public Appointment bookAnotherAppointment(AppointmentDto appointmentDto){
         Doctor doctorByName = doctorService.findDoctorByName(appointmentDto.getDoctorName());
         Doctor doctorsInfo = doctorService.bookAppointment(doctorByName, 1);
