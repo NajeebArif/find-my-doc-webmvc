@@ -1,3 +1,4 @@
+
 server:
   tomcat:
     connection-timeout: 2s
@@ -17,4 +18,9 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 #    hibernate:
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 #      ddl-auto: create

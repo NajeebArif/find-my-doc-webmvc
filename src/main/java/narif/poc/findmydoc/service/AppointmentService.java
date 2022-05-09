@@ -28,15 +28,26 @@ public class AppointmentService {
     public Appointment bookAnAppointment(AppointmentDto appointmentDto){
         Doctor doctor = doctorService.areThereVacantSlots(appointmentDto.getDoctorName());
         Hospital hospital = doctor.getHospital();
-        Slots bookedSlot = doctor.getSlots().stream().filter(availableSlots(appointmentDto))
-                .findFirst().orElseThrow(() -> new RuntimeException("No Available Slots for the requested time"));
+        Slots bookedSlot = getBookedSlot(appointmentDto, doctor);
+        Appointment appointment = createAppointment(appointmentDto, doctor, hospital, bookedSlot);
+        return appointmentRepo.save(appointment);
+    }
+
+    private Slots getBookedSlot(AppointmentDto appointmentDto, Doctor doctor) {
+        return doctor.getSlots().stream()
+                .filter(availableSlots(appointmentDto))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No Available Slots for the requested time"));
+    }
+
+    private Appointment createAppointment(AppointmentDto appointmentDto, Doctor doctor, Hospital hospital, Slots bookedSlot) {
         Appointment appointment = new Appointment();
         appointment.setAppointmentDate(appointmentDto.getAppointmentDate());
         appointment.setHospital(hospital);
         appointment.setDoctor(doctor);
         appointment.setSlots(bookedSlot);
         appointment.setUser(userService.fetchUser(appointmentDto.getUserName()));
-        return appointmentRepo.save(appointment);
+        return appointment;
     }
 
     private Predicate<Slots> availableSlots(AppointmentDto appointmentDto) {
