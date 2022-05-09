@@ -1,5 +1,6 @@
 package narif.poc.findmydoc.service;
 
+import lombok.extern.slf4j.Slf4j;
 import narif.poc.findmydoc.model.dto.AppointmentDto;
 import narif.poc.findmydoc.model.entity.Appointment;
 import narif.poc.findmydoc.model.entity.Doctor;
@@ -12,6 +13,7 @@ import javax.transaction.Transactional;
 import java.util.function.Predicate;
 
 @Service
+@Slf4j
 public class AppointmentService {
 
     private final AppointmentRepo appointmentRepo;
@@ -30,6 +32,18 @@ public class AppointmentService {
         Hospital hospital = doctor.getHospital();
         Slots bookedSlot = getBookedSlot(appointmentDto, doctor);
         Appointment appointment = createAppointment(appointmentDto, doctor, hospital, bookedSlot);
+        return appointmentRepo.save(appointment);
+    }
+
+    @Transactional
+    public Appointment bookAnotherAppointment(AppointmentDto appointmentDto){
+        Doctor doctorByName = doctorService.findDoctorByName(appointmentDto.getDoctorName());
+        Doctor doctorsInfo = doctorService.bookAppointment(doctorByName, 1);
+        log.info("Doctors slot booked.");
+        Hospital hospital = doctorsInfo.getHospital();
+        Slots bookedSlot = getBookedSlot(appointmentDto, doctorsInfo);
+        Appointment appointment = createAppointment(appointmentDto, doctorsInfo, hospital, bookedSlot);
+        log.info("Booking appointment.");
         return appointmentRepo.save(appointment);
     }
 
